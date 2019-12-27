@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.logging.Level;
 
 import androidx.annotation.RequiresApi;
@@ -48,18 +49,14 @@ public class TestPracticeOne {
         quickSort(a,low,i-1);
         quickSort(a,i+1,high);
     }
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public  void quickSortTask(int[] a, int low, int high) {
         if (low >= high)return;
-        LinkedHashMap<Integer,Integer> linkedHashMap=new LinkedHashMap<>();
-        linkedHashMap.put(low,high);
-        while (!linkedHashMap.isEmpty()){
-            Iterator<Map.Entry<Integer,Integer>> it=linkedHashMap.entrySet().iterator();
-            low=it.next().getKey();
-            high=linkedHashMap.get(low);
-            Log.v("heihei=",low+"="+high);
-            linkedHashMap.remove(low,high);
-            if (low>=high)continue;
+        Stack<Integer> integerStack=new Stack<>();
+        integerStack.push(low);
+        integerStack.push(high);
+        while (!integerStack.isEmpty()){
+            high=integerStack.pop();
+            low=integerStack.pop();
             int i=low;
             int j=high;
             int key=a[low];
@@ -79,8 +76,14 @@ public class TestPracticeOne {
         int temp=a[i];
         a[i]=a[low];
         a[low]=temp;
-        linkedHashMap.put(low,i-1);
-        linkedHashMap.put(i+1,high);
+        if (low<i-1){
+            integerStack.push(low);
+            integerStack.push(i-1);
+        }
+        if (i+1<high){
+            integerStack.push(i+1);
+            integerStack.push(high);
+        }
         }
     }
 }
